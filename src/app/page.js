@@ -1,65 +1,89 @@
-import Image from "next/image";
+import dbConnect from "../../lib/mongodb";
+import CampGround from "../../models/CampGround";
+import Link from "next/link";
 
-export default function Home() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.js file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+// Importuri Componente UI
+import Hero from "./components/Hero";
+import Features from "./components/Features";
+import CampgroundCard from "./components/CampgroundCard";
+import { DetailedFeatures } from "./components/DetailedFeatures"; // Secțiunea de detalii "Apple-style"
+import Footer from "./components/Footer";
+import PaymentsPage from "./politici/plati/page";
+
+export default async function HomePage() {
+   await dbConnect();
+
+   // Preluăm cele mai noi 3 campinguri pentru secțiunea Featured
+   const featuredCamps = await CampGround.find({}).sort({ createdAt: -1 }).limit(3).lean();
+
+   return (
+      <main className="bg-stone-50 selection:bg-green-200 selection:text-green-900">
+         {/* 1. HERO SECTION: 3D, Blobs & Glassmorphism */}
+         <Hero />
+
+         {/* 2. BENTO GRID FEATURES: Tehnologie & Libertate */}
+         <div className="bg-white relative z-20">
+            <Features />
+         </div>
+
+         {/* 3. DETAILED FEATURES: Secțiuni alternate cu imagini mari */}
+         <DetailedFeatures />
+
+         {/* 4. FEATURED DESTINATIONS: Cardurile cu campinguri reale */}
+         <section className="max-w-7xl mx-auto px-4 py-32">
+            <div className="flex flex-col md:flex-row justify-between items-baseline mb-16 gap-4">
+               <div>
+                  <h2 className="text-5xl font-black text-stone-900 tracking-tighter">Destinații de top.</h2>
+                  <p className="text-xl text-stone-500 mt-4 max-w-md font-medium">Selecția noastră de locații premium, verificate manual pentru siguranță și confort.</p>
+               </div>
+               <Link href="/campgrounds" className="group flex items-center text-green-800 font-bold text-lg hover:text-green-700 transition-colors">
+                  Explorează tot catalogul
+                  <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
+               </Link>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+               {featuredCamps.length > 0 ? (
+                  featuredCamps.map((camp) => <CampgroundCard key={camp._id} campground={JSON.parse(JSON.stringify(camp))} />)
+               ) : (
+                  <div className="col-span-full py-20 text-center bg-white rounded-[2rem] border border-dashed border-stone-200">
+                     <p className="text-stone-400 italic">Nu am găsit campinguri de afișat momentan.</p>
+                  </div>
+               )}
+            </div>
+         </section>
+
+         {/* 5. CALL TO ACTION: Cardul final de impact */}
+         <section className="py-32 px-4">
+            <div className="max-w-6xl mx-auto bg-green-950 rounded-[4rem] p-16 md:p-32 text-center text-white relative overflow-hidden shadow-[0_40px_100px_-20px_rgba(0,45,0,0.3)]">
+               {/* Overlay Decorativ */}
+               <div className="absolute inset-0 opacity-20 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]" />
+               <div className="absolute -top-24 -right-24 w-64 h-64 bg-green-500 rounded-full blur-[120px] opacity-20" />
+               <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-orange-400 rounded-full blur-[120px] opacity-20" />
+
+               <div className="relative z-10">
+                  <h2 className="text-5xl md:text-7xl font-black mb-10 leading-[0.9] tracking-tighter">
+                     Ești gata să îți <br /> instalezi cortul <br />
+                     <span className="text-green-400">sub stele?</span>
+                  </h2>
+
+                  <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                     <Link
+                        href="/register"
+                        className="bg-white text-green-950 px-12 py-6 rounded-full font-black text-xl hover:bg-stone-100 transition-all hover:scale-105 active:scale-95 shadow-xl"
+                     >
+                        Creează un cont acum
+                     </Link>
+                     <Link href="/campgrounds" className="text-white font-bold text-lg hover:underline underline-offset-8">
+                        Află cum funcționează
+                     </Link>
+                  </div>
+
+                  <p className="mt-12 text-green-200/60 text-sm font-medium uppercase tracking-[0.3em]">Alătură-te celor +2,000 de exploratori</p>
+               </div>
+            </div>
+         </section>
+         <Footer />
       </main>
-    </div>
-  );
+   );
 }
