@@ -7,7 +7,7 @@ import { Calendar, MapPin, ChevronLeft, Share2, Trash2, Edit3 } from "lucide-rea
 import Link from "next/link";
 import mongoose from "mongoose";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "../../../../lib/auth";
 import { deleteStory } from "@/app/actions/story";
 
 export default async function StoryDetailPage({ params }) {

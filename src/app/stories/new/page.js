@@ -2,7 +2,7 @@ import dbConnect from "../../../../lib/mongodb";
 import CampGround from "../../../../models/CampGround";
 import StoryEditor from "@/app/components/StoryEditor";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "../../../../lib/auth";
 import { redirect } from "next/navigation";
 
 export default async function NewStoryPage() {

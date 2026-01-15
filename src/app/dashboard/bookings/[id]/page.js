@@ -3,7 +3,7 @@ import Booking from "../../../../../models/Booking";
 import Campground from "../../../../../models/CampGround";
 import User from "../../../../../models/User";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "../../../../../lib/auth";
 import { notFound } from "next/navigation";
 import { MapPin, Calendar, CreditCard, ChevronLeft, ArrowRight, CheckCircle2, Receipt } from "lucide-react";
 import Link from "next/link";
