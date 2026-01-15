@@ -3,7 +3,7 @@
 import dbConnect from "../../../lib/mongodb";
 import Booking from "../../../models/Booking";
 import { getServerSession } from "next-auth"; // Importă funcția de sesiune
-import { authOptions } from "../api/auth/[...nextauth]/route"; // Importă configurația auth
+import { authOptions } from "../../../lib/auth";
 import CampGround from "../../../models/CampGround";
 
 export async function getBookedDates(campgroundId) {

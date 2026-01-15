@@ -4,7 +4,7 @@ import dbConnect from "../../../lib/mongodb";
 import Review from "../../../models/Review";
 import CampGround from "../../../models/CampGround";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../api/auth/[...nextauth]/route";
+import { authOptions } from "../../../lib/auth";
 import { revalidatePath } from "next/cache";
 
 export async function createReview(campgroundId, reviewData) {

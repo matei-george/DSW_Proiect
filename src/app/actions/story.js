@@ -3,7 +3,7 @@
 import dbConnect from "../../../lib/mongodb";
 import Story from "../../../models/Story";
 import { getServerSession } from "next-auth/next"; // Importă getServerSession
-import { authOptions } from "../api/auth/[...nextauth]/route";
+import { authOptions } from "../../../lib/auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
