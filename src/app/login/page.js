@@ -1,4 +1,5 @@
-"use client";
+export const dynamic = "force-dynamic";
+("use client");
 
 import { useState, useEffect, Suspense } from "react"; // Adăugat Suspense
 import { signIn } from "next-auth/react";
