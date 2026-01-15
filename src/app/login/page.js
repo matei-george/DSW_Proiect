@@ -1,14 +1,15 @@
-export const dynamic = "force-dynamic";
-("use client");
+"use client";
 
-import { useState, useEffect, Suspense } from "react"; // Adăugat Suspense
+export const dynamic = "force-dynamic";
+
+import { useState, useEffect, Suspense } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mail, Lock, ArrowRight, Trees, AlertCircle, CheckCircle2 } from "lucide-react";
 
-// 1. Mutăm toată logica într-o componentă internă
+// 1. Componenta care folosește searchParams
 function LoginContent() {
    const [formData, setFormData] = useState({ email: "", password: "" });
    const [error, setError] = useState("");
@@ -38,12 +39,11 @@ function LoginContent() {
          password: formData.password,
       });
 
-      if (result.error) {
+      if (result?.error) {
          setError("Datele introduse nu par să fie corecte.");
          setLoading(false);
       } else {
-         router.push("/");
-         router.refresh();
+         window.location.href = "/";
       }
    };
 
@@ -140,7 +140,7 @@ function LoginContent() {
    );
 }
 
-// 2. Exportăm pagina principală împachetată în Suspense
+// 2. Exportul principal cu Suspense
 export default function LoginPage() {
    return (
       <main className="min-h-screen bg-white flex items-center justify-center px-6 pt-24 pb-12">
